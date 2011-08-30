@@ -1,25 +1,12 @@
+require_relative "iterator"
+
 module Lazy
 
-#  def Lazy.list
-#  end
-# 
-#  class Expr
-#    def initialize(expr)
-#      @expr = expr
-#    end 
-#    def evaluate
-#      xs = @expr.split(",")
-#      case xs.size
-#      when 1
-#        a = xs[0].delete(".")
-#      when 2
-#        a = xs[0]
-#	b = xs[1].delete(".")
-#      else
-#      end
-#    end
+  def Lazy.inc(init, &inc_lambda)
+    Increment.new(init, &inc_lambda)
+  end
 
-  class Increment < Enumerator
+  class Increment < Iterator
     
     def initialize(init, &inc_lambda)
       @init = init
@@ -40,25 +27,18 @@ module Lazy
       end     
     end
 
-    def each_with_index
-      # According to "ruby.runpaint.org/ref/enumerator",
-      # each_with_index can return self if given no block.
-      unless block_given?
-        self
-      end
-    end
-
     def rewind
       @idx = 0
       @state = @init
       self
     end
 
-    private
+  private
     def forward
       @state = @inc.call(@state)
     end
   end
+
 end
 
 if __FILE__ == $0

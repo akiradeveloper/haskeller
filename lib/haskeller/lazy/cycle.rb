@@ -1,15 +1,20 @@
+require_relative "iterator"
+
 module Lazy
 
-  class Cycle < Enumerator
+  def Lazy.repeat(x)
+    cycle([x])
+  end
+
+  def Lazy.cycle(ary)
+    Cycle.new(ary)
+  end
+
+  class Cycle < Iterator
 
     def initialize(ary)
       @ary = ary
       @idx = 0
-    end
-    def each_with_index
-      unless block_given?
-        self   
-      end
     end
     def each
       unless block_given?
@@ -28,7 +33,7 @@ module Lazy
       forward
       get
     end
-    private
+  private
     def forward
       @idx += 1
     end

@@ -1,2 +1,2 @@
-require_relative "lazy"
-require_relative "enumerable"
+require_relative "haskeller/lazy"
+require_relative "haskeller/eager"

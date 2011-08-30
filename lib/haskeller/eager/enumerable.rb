@@ -1,15 +1,12 @@
 require_relative "metaprog"
 
 module Enumerable 
+
   news = [
-    "foldl",
-    "dropWhile",
-    "takeWhile"
+    "foldl"
   ]
   olds = [
-    "inject",
-    "drop_while",
-    "take_while"
+    "inject"
   ]
 
   news.zip(olds).each do |new, old|

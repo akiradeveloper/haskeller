@@ -18,14 +18,14 @@ describe "foldl" do
 end
 
 
-describe "dropWhile" do
-  [3] == xs.dropWhile do |x|
+describe "drop_while" do
+  [3] == xs.drop_while do |x|
     x < 3
   end
 end
 
-describe "takeWhile" do
-  [1,2] == xs.takeWhile do |x|
+describe "take_while" do
+  [1,2] == xs.take_while do |x|
     x < 3
   end
 end
