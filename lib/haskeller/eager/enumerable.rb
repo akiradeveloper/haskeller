@@ -1,26 +1,63 @@
-require_relative "metaprog"
+require_relative "../metaprog"
 
 module Enumerable 
 
-  news = [
-    "foldl"
+  renames = [
+    ["foldl", "inject"],
+    ["filter", "select"],
+    ["concat", "flat_map"],
+    ["length", "count"],
+    ["elem?", "include?"]
   ]
-  olds = [
-    "inject"
-  ]
-
-  news.zip(olds).each do |new, old|
+  
+  renames.each do |new, old|
     define_delegation(new, old)
   end
 
-  def head
-    [0]
+  def tail
   end
 
-  def filter(&blk)
-    delete_if do |x|
-      ! blk.call(x)
+  def break
+  end
+
+  def span
+  end
+
+  def head
+    e = to_enum
+    e.next
+  end
+
+  def foldr(init, &blk)
+    reverse_each do |x|
+      yield( x, acc )
     end
+  end
+
+  def foldr1(&blk)
+    foldr(0, &blk)
+  end
+
+  def foldl1(&blk)
+    foldl(0, &blk)
+  end
+
+  def concat_map(&blk)
+    map(&blk).concat
+  end
+  
+  def or?
+    any? { |x| x == True }
+  end
+
+  def and?
+    all? { |x| x == True }
+  end
+end
+
+class Array
+  def head
+    [0]
   end
 end
 

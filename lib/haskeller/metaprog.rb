@@ -1,7 +1,6 @@
 module Kernel 
   def define_delegation(new, delegate)
     s = "def #{new}(*args, &blk); #{delegate}(*args, &blk) end"
-    puts s
     eval(s)
   end
 end

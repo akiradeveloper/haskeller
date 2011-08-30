@@ -1,36 +1,50 @@
 module Enumerable
 
-  def lazy_map(&blk)
-    Lazy::Map.new(self, &blk)
+  def mapL(&blk)
+    Enumerator.new do |y|
+      self.each do |x|
+        y << (blk.call x)
+      end
+    end
   end
 
-  def lazy_filter(&blk)
-    Lazy::Filter.new(self, &blk)
+  def filterL(&blk)
+    Enumerator.new do |y|
+      self.each do |x|
+        y << x if blk.call(x)
+      end
+    end
   end
-  
-  def lazy_zip(*iters)
-    xs = [self] + iters
-    Lazy::Zip.new(xs)
+
+  def zipL( *its )
+    es = []
+    es << self
+    its.each do |it|
+      es << it
+    end
+    Lazy.zip( es )
   end
 
-# Copy of a Blog.
+  def takeL(n)
+    e = to_enum
+    Enumerator.new do |y|
+      n.times do
+        y << e.next
+      end
+    end
+  end
 
-#  def self.make_lazy(*syms)
-#    syms.each do |sym|
-#      class_eval <<-"EOD"
-#        def lazy_#{sym}(*arg, &blk)
-#          Enumerator.new do |e|
-#            each do |x|
-#	      #p x
-#              [x].#{sym}(*arg, &blk).each { |y| p y; e << y }
-#            end
-#          end
-#        end
-#      EOD
-#    end
-#  end
-#  
-#  make_lazy :collect, :map, :select, :reject, :grep
-#  make_lazy :find_all, :flat_map, :concat_collector
+  def take_whileL(&blk)
+    e = to_enum
+    Enumerator.new do |y|
+      while( x=e.next; blk.call(x) ) do
+        y << x     
+      end
+    end
+  end
+end
 
+if __FILE__ == $0
+  inf = 0..1.0/0
+  p inf.take_whileL { |x| x < 100 }.to_a
 end
